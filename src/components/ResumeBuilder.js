@@ -1972,4 +1972,737 @@
 // export default ResumeBuilder;
 
 
- 
+
+//working code 2 with score bar and split functionality
+// ResumeBuilder.js
+// import React, { useState, useRef } from 'react';
+// import { Link } from 'react-router-dom';
+// import { 
+//   ChevronDown,
+//   Download,
+//   Plus,
+//   Edit,
+//   Bold,
+//   Italic,
+//   Underline,
+//   List,
+//   Link2,
+//   HelpCircle,
+//   MinusCircle,
+//   PlusCircle,
+//   MoreHorizontal,
+//   Layout
+// } from 'lucide-react';
+
+// import TopToolbar from './TopToolbar';
+// import ResumeScore from './ResumeScore';
+// import ResumeEditor from './ResumeEditor';
+// import ResumePreview from './ResumePreview';
+// import PersonalDetails from './PersonalDetails';
+// import { calculateResumeScore } from '../utils/scoreCalculator';
+
+// const ResumeBuilder = () => {
+//   // States
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [title, setTitle] = useState('Untitled');
+//   const [showLanguages, setShowLanguages] = useState(false);
+//   const [selectedLanguage, setSelectedLanguage] = useState({
+//     code: 'US',
+//     name: 'English',
+//     flag: '🇺🇸'
+//   });
+
+//   const [personalDetails, setPersonalDetails] = useState({
+//     jobTitle: '',
+//     firstName: '',
+//     lastName: '',
+//     email: '',
+//     phone: '',
+//     country: '',
+//     city: '',
+//     address: '',
+//     postalCode: '',
+//     drivingLicense: '',
+//     nationality: '',
+//     placeOfBirth: '',
+//     dateOfBirth: ''
+//   });
+
+//   const [showMoreDetails, setShowMoreDetails] = useState(false);
+//   const [professionalSummary, setProfessionalSummary] = useState(
+//     'Curious science teacher with 8+ years of experience and a track record of...'
+//   );
+//   const [profileImage, setProfileImage] = useState(null);
+//   const [selectedSkills, setSelectedSkills] = useState([]);
+//   const [employmentHistory, setEmploymentHistory] = useState([]);
+//   const [education, setEducation] = useState([]);
+//   const [websiteLinks, setWebsiteLinks] = useState([]);
+//   const fileInputRef = useRef(null);
+
+//   // Constants
+//   const skills = [
+//     "Knowledgeable in User Interface/User Experience",
+//     "Software Troubleshooting",
+//     "Software Logic",
+//     "Programming",
+//     "Advanced Analytical Thinking Skills",
+//     "Adaptability",
+//     "JavaScript",
+//     "Java",
+//     "Python",
+//     "SQL"
+//   ];
+
+//   const languages = [
+//     { code: 'US', name: 'English', flag: '🇺🇸' },
+//     { code: 'UK', name: 'English (UK)', flag: '🇬🇧' },
+//     { code: 'NZ', name: 'New Zealand (NZ)', flag: '🇳🇿' },
+//     { code: 'ES', name: 'Español', flag: '🇪🇸' },
+//     { code: 'MX', name: 'Español (MX)', flag: '🇲🇽' }
+//   ];
+
+//   // Handlers
+//   const handleSkillSelect = (skill) => {
+//     if (!selectedSkills.includes(skill)) {
+//       setSelectedSkills([...selectedSkills, skill]);
+//     }
+//   };
+
+//   const handleImageUpload = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         setProfileImage(reader.result);
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+//   const handleTitleEdit = () => {
+//     setIsEditing(true);
+//   };
+
+//   const handleTitleChange = (e) => {
+//     setTitle(e.target.value);
+//   };
+
+//   const handleTitleBlur = () => {
+//     setIsEditing(false);
+//   };
+
+//   const handleTitleKeyDown = (e) => {
+//     if (e.key === 'Enter') {
+//       setIsEditing(false);
+//     }
+//   };
+
+//   const handleLanguageSelect = (language) => {
+//     setSelectedLanguage(language);
+//     setShowLanguages(false);
+//   };
+
+//   // Calculate resume score
+//   const resumeScore = calculateResumeScore({
+//     personalDetails,
+//     professionalSummary,
+//     profileImage,
+//     selectedSkills,
+//     employmentHistory,
+//     education
+//   });
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 flex">
+//       {/* Left side - Form */}
+//       <div className="flex-1 overflow-auto">
+//         <TopToolbar 
+//           title={title}
+//           isEditing={isEditing}
+//           setIsEditing={setIsEditing}
+//           handleTitleChange={handleTitleChange}
+//           handleTitleBlur={handleTitleBlur}
+//           handleTitleKeyDown={handleTitleKeyDown}
+//           showLanguages={showLanguages}
+//           setShowLanguages={setShowLanguages}
+//           selectedLanguage={selectedLanguage}
+//           handleLanguageSelect={handleLanguageSelect}
+//           languages={languages}
+//         />
+
+//         <div className="p-6 max-w-4xl mx-auto">
+//           <ResumeScore score={resumeScore} />
+
+//           {/* Tailor Resume Notice */}
+//           <div className="bg-blue-50 p-4 rounded-lg mb-6">
+//             <div className="flex justify-between items-center">
+//               <div className="flex items-center gap-2">
+//                 <span>🎯</span>
+//                 <span>Tailor this resume for the job, and get more interviews</span>
+//               </div>
+//               <button className="text-blue-500">Try it ›</button>
+//             </div>
+//           </div>
+
+//           {/* Personal Details */}
+//           <PersonalDetails
+//             personalDetails={personalDetails}
+//             setPersonalDetails={setPersonalDetails}
+//             profileImage={profileImage}
+//             setProfileImage={setProfileImage}
+//             showMoreDetails={showMoreDetails}
+//             setShowMoreDetails={setShowMoreDetails}
+//           />
+
+//           {/* Professional Summary */}
+//           <div className="bg-white rounded-lg p-6 mb-6">
+//             <h2 className="text-lg font-medium mb-2">Professional Summary</h2>
+//             <p className="text-gray-600 mb-4">
+//               Write 2-4 short, energetic sentences about how great you are. Mention your achievements, skills and experience.
+//             </p>
+//             <div className="mb-4">
+//               <div className="flex space-x-2 mb-2 border-b pb-2">
+//                 <button className="p-2 hover:bg-gray-100 rounded">
+//                   <Bold size={16} />
+//                 </button>
+//                 <button className="p-2 hover:bg-gray-100 rounded">
+//                   <Italic size={16} />
+//                 </button>
+//                 <button className="p-2 hover:bg-gray-100 rounded">
+//                   <Underline size={16} />
+//                 </button>
+//                 <button className="p-2 hover:bg-gray-100 rounded">
+//                   <List size={16} />
+//                 </button>
+//                 <button className="p-2 hover:bg-gray-100 rounded">
+//                   <Link2 size={16} />
+//                 </button>
+//                 <div className="flex-grow"></div>
+//                 <button className="text-blue-500 flex items-center">
+//                   Get help with writing
+//                   <Plus size={16} className="ml-1" />
+//                 </button>
+//               </div>
+//               <textarea
+//                 value={professionalSummary}
+//                 onChange={(e) => setProfessionalSummary(e.target.value)}
+//                 className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 min-h-[100px]"
+//               />
+//               <div className="flex justify-between items-center mt-2 text-sm text-gray-500">
+//                 <span>Recruiter tip: write 400-600 characters to increase interview chances</span>
+//                 <span>0 / 400+</span>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Skills Section */}
+//           <div className="bg-white rounded-lg p-6 mb-6">
+//             <h2 className="text-lg font-medium mb-2">Skills</h2>
+//             <p className="text-gray-600 mb-4">
+//               Choose 5 important skills that show you fit the position. Make sure they match the key skills mentioned in the job listing.
+//             </p>
+//             <div className="flex flex-wrap gap-2 mb-4">
+//               {skills.map((skill, index) => (
+//                 <div 
+//                   key={index} 
+//                   className="bg-gray-50 px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-gray-100"
+//                   onClick={() => handleSkillSelect(skill)}
+//                 >
+//                   {skill}
+//                   <Plus size={16} className="text-gray-400" />
+//                 </div>
+//               ))}
+//             </div>
+//             <button className="text-blue-500 flex items-center">
+//               <Plus size={16} className="mr-1" />
+//               Add skill
+//             </button>
+//           </div>
+
+//           {/* Employment History */}
+//           <div className="bg-white rounded-lg shadow p-6 mb-6">
+//             <h2 className="text-xl font-semibold mb-2">Employment History</h2>
+//             <p className="text-gray-600 mb-4">
+//               Show your relevant experience (last 10 years). Use bullet points to note your achievements, if possible - use numbers/facts (Achieved X, measured by Y, by doing Z).
+//             </p>
+//             <button className="flex items-center text-blue-500 space-x-1">
+//               <Plus size={16} />
+//               <span>Add employment</span>
+//             </button>
+//           </div>
+
+//           {/* Education */}
+//           <div className="bg-white rounded-lg shadow p-6 mb-6">
+//             <h2 className="text-xl font-semibold mb-2">Education</h2>
+//             <p className="text-gray-600 mb-4">
+//               A varied education on your resume sums up the value that your learnings and background will bring to job.
+//             </p>
+//             <button className="flex items-center text-blue-500 space-x-1">
+//               <Plus size={16} />
+//               <span>Add education</span>
+//             </button>
+//           </div>
+
+//           {/* Websites & Social Links */}
+//           <div className="bg-white rounded-lg shadow p-6 mb-6">
+//             <h2 className="text-xl font-semibold mb-2">Websites & Social Links</h2>
+//             <p className="text-gray-600 mb-4">
+//               You can add links to websites you want hiring managers to see! Perhaps it will be a link to your portfolio, LinkedIn profile, or personal website
+//             </p>
+//             <button className="flex items-center text-blue-500 space-x-1">
+//               <Plus size={16} />
+//               <span>Add link</span>
+//             </button>
+//           </div>
+
+//           {/* Additional Sections */}
+//           <div className="bg-white rounded-lg p-6 mb-6">
+//             <h2 className="text-lg font-medium mb-4">Add Section</h2>
+//             <div className="grid grid-cols-2 gap-4">
+//               {[
+//                 { icon: "📄", text: "Custom Section" },
+//                 { icon: "📚", text: "Courses" },
+//                 { icon: "🎯", text: "Extra-curricular Activities" },
+//                 { icon: "💼", text: "Internships" },
+//                 { icon: "⭐", text: "Hobbies" },
+//                 { icon: "🌍", text: "Languages" },
+//                 { icon: "👥", text: "References" }
+//               ].map((item, index) => (
+//                 <button
+//                   key={index}
+//                   className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg text-gray-600"
+//                 >
+//                   <span className="text-xl">{item.icon}</span>
+//                   <span>{item.text}</span>
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* Footer */}
+//           <div className="mt-8 pb-8 text-center text-gray-500 text-sm">
+//             <p>Need help building your resume? Check out our guides and examples.</p>
+//             <div className="flex justify-center gap-4 mt-4">
+//               <button className="text-blue-500 hover:underline">Resume Writing Guide</button>
+//               <button className="text-blue-500 hover:underline">Resume Examples</button>
+//               <button className="text-blue-500 hover:underline">Help Center</button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Right side - Preview */}
+//       <ResumePreview 
+//         personalDetails={personalDetails}
+//         profileImage={profileImage}
+//         professionalSummary={professionalSummary}
+//         selectedSkills={selectedSkills}
+//         employmentHistory={employmentHistory}
+//         education={education}
+//         websiteLinks={websiteLinks}
+//       />
+//     </div>
+//   );
+// };
+
+// export default ResumeBuilder;
+
+import React, { useState, useRef, useCallback } from 'react';
+
+import { 
+  
+  Plus,
+  
+  Bold,
+  Italic,
+  Underline,
+  List as ListIcon,
+  Link2,
+
+  MinusCircle,
+  
+  Loader
+} from 'lucide-react';
+
+
+import TopToolbar from './TopToolbar';
+import ResumeScore from './ResumeScore';
+import ResumePreview from './ResumePreview';
+import PersonalDetails from './PersonalDetails';
+import EmploymentSection from './EmploymentSection';
+import EducationSection from './EducationSection';
+import { calculateResumeScore } from '../utils/scoreCalculator';
+import { validatePersonalDetails } from '../utils/validation'; // Fix the import syntax
+import { useFormValidation } from '../hooks/useFormValidation';
+
+const ResumeBuilder = () => {
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Form states
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState('Untitled');
+  const [showLanguages, setShowLanguages] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState({
+    code: 'US',
+    name: 'English',
+    flag: '🇺🇸'
+  });
+
+  // Form validation states
+  const {
+    values: personalDetails,
+    errors: personalDetailsErrors,
+    handleChange: handlePersonalDetailsChange,
+    handleBlur: handlePersonalDetailsBlur,
+    handleSubmit: handlePersonalDetailsSubmit
+  } = useFormValidation({
+    jobTitle: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    country: '',
+    city: '',
+    address: '',
+    postalCode: '',
+    drivingLicense: '',
+    nationality: '',
+    placeOfBirth: '',
+    dateOfBirth: ''
+  }, validatePersonalDetails);
+
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
+  const [professionalSummary, setProfessionalSummary] = useState(
+    'Curious science teacher with 8+ years of experience and a track record of...'
+  );
+  const [profileImage, setProfileImage] = useState(null);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [employmentHistory, setEmploymentHistory] = useState([]);
+  const [education, setEducation] = useState([]);
+  const [websiteLinks, setWebsiteLinks] = useState([]);
+  const fileInputRef = useRef(null);
+
+  // Error states
+  const [imageError, setImageError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
+
+  // Constants
+  const skills = [
+    "Knowledgeable in User Interface/User Experience",
+    "Software Troubleshooting",
+    "Software Logic",
+    "Programming",
+    "Advanced Analytical Thinking Skills",
+    "Adaptability",
+    "JavaScript",
+    "Java",
+    "Python",
+    "SQL"
+  ];
+
+  const languages = [
+    { code: 'US', name: 'English', flag: '🇺🇸' },
+    { code: 'UK', name: 'English (UK)', flag: '🇬🇧' },
+    { code: 'NZ', name: 'New Zealand (NZ)', flag: '🇳🇿' },
+    { code: 'ES', name: 'Español', flag: '🇪🇸' },
+    { code: 'MX', name: 'Español (MX)', flag: '🇲🇽' }
+  ];
+
+  // Handlers
+  const handleSkillSelect = useCallback((skill) => {
+    if (!selectedSkills.includes(skill)) {
+      setSelectedSkills(prev => [...prev, skill]);
+    }
+  }, [selectedSkills]);
+
+  const handleSkillRemove = useCallback((skillToRemove) => {
+    setSelectedSkills(prev => prev.filter(skill => skill !== skillToRemove));
+  }, []);
+
+  const handleImageUpload = async (event) => {
+    try {
+      setIsUploading(true);
+      setImageError(null);
+      const file = event.target.files[0];
+      
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        throw new Error('Please upload an image file');
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('Image size should be less than 5MB');
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+        setIsUploading(false);
+      };
+      reader.onerror = () => {
+        throw new Error('Failed to read file');
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      setImageError(error.message);
+      setIsUploading(false);
+    }
+  };
+
+  const handleSaveResume = async () => {
+    try {
+      setIsSaving(true);
+      setSubmitError(null);
+
+      // Validate all sections
+      const personalDetailsValid = await handlePersonalDetailsSubmit();
+      
+      if (!personalDetailsValid) {
+        throw new Error('Please fill in all required personal details');
+      }
+
+      // Here you would typically make an API call to save the resume
+      // For now, we'll simulate an API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Success notification can be added here
+      
+    } catch (error) {
+      setSubmitError(error.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Calculate resume score
+  const resumeScore = calculateResumeScore({
+    personalDetails,
+    professionalSummary,
+    profileImage,
+    selectedSkills,
+    employmentHistory,
+    education
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader className="w-8 h-8 animate-spin text-blue-500" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Left side - Form */}
+      <div className="flex-1 overflow-auto">
+        <TopToolbar 
+          title={title}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          handleTitleChange={(e) => setTitle(e.target.value)}
+          handleTitleBlur={() => setIsEditing(false)}
+          handleTitleKeyDown={(e) => e.key === 'Enter' && setIsEditing(false)}
+          showLanguages={showLanguages}
+          setShowLanguages={setShowLanguages}
+          selectedLanguage={selectedLanguage}
+          handleLanguageSelect={setSelectedLanguage}
+          languages={languages}
+          onSave={handleSaveResume}
+          isSaving={isSaving}
+        />
+
+        <div className="p-6 max-w-4xl mx-auto">
+          <ResumeScore score={resumeScore} />
+
+          {submitError && (
+            <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-lg">
+              {submitError}
+            </div>
+          )}
+
+          {/* Personal Details */}
+          <PersonalDetails
+            personalDetails={personalDetails}
+            errors={personalDetailsErrors}
+            onChange={handlePersonalDetailsChange}
+            onBlur={handlePersonalDetailsBlur}
+            profileImage={profileImage}
+            setProfileImage={setProfileImage}
+            showMoreDetails={showMoreDetails}
+            setShowMoreDetails={setShowMoreDetails}
+            onImageUpload={handleImageUpload}
+            isUploading={isUploading}
+            imageError={imageError}
+            fileInputRef={fileInputRef}
+          />
+
+          {/* Professional Summary */}
+          <div className="bg-white rounded-lg p-6 mb-6">
+            <h2 className="text-lg font-medium mb-2">Professional Summary</h2>
+            <p className="text-gray-600 mb-4">
+              Write 2-4 short, energetic sentences about your achievements, skills and experience.
+            </p>
+            <div className="mb-4">
+              <div className="flex space-x-2 mb-2 border-b pb-2">
+                <button className="p-2 hover:bg-gray-100 rounded">
+                  <Bold size={16} />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded">
+                  <Italic size={16} />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded">
+                  <Underline size={16} />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded">
+                  <ListIcon size={16} />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded">
+                  <Link2 size={16} />
+                </button>
+                <div className="flex-grow" />
+                <button className="text-blue-500 flex items-center">
+                  Get help with writing
+                  <Plus size={16} className="ml-1" />
+                </button>
+              </div>
+              <textarea
+                value={professionalSummary}
+                onChange={(e) => setProfessionalSummary(e.target.value)}
+                className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200 min-h-[100px]"
+              />
+              <div className="flex justify-between items-center mt-2 text-sm text-gray-500">
+                <span>Recruiter tip: write 400-600 characters to increase interview chances</span>
+                <span>{professionalSummary.length} / 600</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Skills Section */}
+          <div className="bg-white rounded-lg p-6 mb-6">
+            <h2 className="text-lg font-medium mb-2">Skills</h2>
+            <p className="text-gray-600 mb-4">
+              Choose 5 important skills that show you fit the position.
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedSkills.map((skill, index) => (
+                <div 
+                  key={index}
+                  className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg flex items-center gap-2"
+                >
+                  {skill}
+                  <button 
+                    onClick={() => handleSkillRemove(skill)}
+                    className="hover:text-blue-700"
+                  >
+                    <MinusCircle size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                !selectedSkills.includes(skill) && (
+                  <button
+                    key={index}
+                    onClick={() => handleSkillSelect(skill)}
+                    className="bg-gray-50 hover:bg-gray-100 px-3 py-1 rounded-lg flex items-center gap-2"
+                  >
+                    {skill}
+                    <Plus size={16} className="text-gray-400" />
+                  </button>
+                )
+              ))}
+            </div>
+          </div>
+
+          {/* Employment History */}
+          <EmploymentSection
+            employment={employmentHistory}
+            setEmployment={setEmploymentHistory}
+          />
+
+          {/* Education */}
+          <EducationSection
+            education={education}
+            setEducation={setEducation}
+          />
+
+          {/* Website Links */}
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-2">Websites & Social Links</h2>
+            <p className="text-gray-600 mb-4">
+              Add your portfolio, LinkedIn, or other relevant links.
+            </p>
+            <div className="space-y-4">
+              {websiteLinks.map((link, index) => (
+                <div key={index} className="flex gap-4">
+                  <input
+                    type="text"
+                    value={link.label}
+                    onChange={(e) => {
+                      const newLinks = [...websiteLinks];
+                      newLinks[index].label = e.target.value;
+                      setWebsiteLinks(newLinks);
+                    }}
+                    placeholder="Label (e.g., Portfolio)"
+                    className="flex-1 p-3 bg-gray-50 rounded-lg border"
+                  />
+                  <input
+                    type="url"
+                    value={link.url}
+                    onChange={(e) => {
+                      const newLinks = [...websiteLinks];
+                      newLinks[index].url = e.target.value;
+                      setWebsiteLinks(newLinks);
+                    }}
+                    placeholder="URL (e.g., https://...)"
+                    className="flex-1 p-3 bg-gray-50 rounded-lg border"
+                  />
+                  <button
+                    onClick={() => {
+                      setWebsiteLinks(websiteLinks.filter((_, i) => i !== index));
+                    }}
+                    className="text-red-500 hover:text-red-600 p-2"
+                  >
+                    <MinusCircle size={20} />
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => {
+                  setWebsiteLinks([...websiteLinks, { label: '', url: '' }]);
+                }}
+                className="flex items-center text-blue-500 hover:text-blue-600"
+              >
+                <Plus size={20} className="mr-2" />
+                Add link
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side - Preview */}
+      <div className="w-[600px] bg-gray-100 p-6 sticky top-0 h-screen overflow-auto border-l">
+        <ResumePreview 
+          personalDetails={personalDetails}
+          profileImage={profileImage}
+          professionalSummary={professionalSummary}
+          selectedSkills={selectedSkills}
+          employmentHistory={employmentHistory}
+          education={education}
+          websiteLinks={websiteLinks}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ResumeBuilder;

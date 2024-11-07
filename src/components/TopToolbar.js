@@ -1,98 +1,97 @@
-import React, { useState } from 'react';
-import { Download, MoreHorizontal, Settings, HelpCircle, LogOut } from 'lucide-react';
+import React from 'react';
+import { Download, Edit, ChevronDown, MoreHorizontal } from 'lucide-react';
 
-const TopToolbar = () => {
-  const [showExportMenu, setShowExportMenu] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-
-  const user = {
-    name: "Ravindra Jadhav",
-    email: "rjadha757@gmail.com"
-  };
-
+const TopToolbar = ({ 
+  title, 
+  isEditing, 
+  setIsEditing, 
+  handleTitleChange, 
+  handleTitleBlur, 
+  handleTitleKeyDown,
+  showLanguages,
+  setShowLanguages,
+  selectedLanguage,
+  handleLanguageSelect,
+  languages,
+  onSave,
+  isSaving
+}) => {
   return (
-    <div className="flex items-center justify-between w-full px-4 py-2 bg-slate-600 text-white">
-      <div className="flex items-center gap-4">
-        <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-500 rounded">
-          <div className="grid grid-cols-2 gap-0.5">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-white rounded-sm"></div>
-            ))}
-          </div>
-          <span className="text-sm">Select template</span>
-        </button>
+    <div className="flex justify-between items-center p-4 border-b bg-white">
+      <div className="flex items-center space-x-4">
+        <button className="p-2">☰</button>
+        <span className="font-medium">Resume Builder</span>
+      </div>
+      
+      <div className="text-center relative">
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              onBlur={handleTitleBlur}
+              onKeyDown={handleTitleKeyDown}
+              className="text-xl border-b border-blue-500 focus:outline-none px-2"
+              autoFocus
+            />
+          ) : (
+            <h1 
+              className="text-xl cursor-pointer hover:text-gray-600 flex items-center gap-2"
+              onClick={() => setIsEditing(true)}
+            >
+              {title}
+              <button className="text-gray-400 hover:text-gray-600">
+                <Edit className="w-4 h-4" />
+              </button>
+            </h1>
+          )}
+        </div>
         
-        <div className="flex items-center gap-3 text-sm">
-          <button className="hover:bg-slate-500 p-1 rounded">
-            <span className="text-lg px-1">−</span>
+        <div className="relative">
+          <button 
+            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 mt-1 px-3 py-1 rounded-md hover:bg-gray-50"
+            onClick={() => setShowLanguages(!showLanguages)}
+          >
+            <span className="text-lg">{selectedLanguage.flag}</span>
+            <span>{selectedLanguage.name}</span>
+            <ChevronDown className="w-4 h-4" />
           </button>
-          <span className="font-medium">Aa</span>
-          <button className="hover:bg-slate-500 p-1 rounded">
-            <span className="text-lg px-1">+</span>
-          </button>
+
+          {showLanguages && (
+            <div className="absolute top-full left-0 mt-1 w-48 bg-white border rounded-lg shadow-lg z-50">
+              {languages.map((language) => (
+                <button
+                  key={language.code}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={() => handleLanguageSelect(language)}
+                >
+                  <span className="text-lg">{language.flag}</span>
+                  <span>{language.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <button className="flex items-center gap-2 px-4 py-1.5 bg-blue-500 hover:bg-blue-600 rounded text-sm">
+        <button
+          onClick={onSave}
+          disabled={isSaving}
+          className={`bg-blue-500 text-white px-4 py-2 rounded flex items-center gap-2 ${
+            isSaving ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+          }`}
+        >
           <Download className="w-4 h-4" />
-          Download PDF
+          {isSaving ? 'Saving...' : 'Save & Download'}
         </button>
-        
-        <div className="relative">
-          <button 
-            className="p-1.5 hover:bg-slate-500 rounded"
-            onClick={() => setShowExportMenu(!showExportMenu)}
-          >
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
-          
-          {showExportMenu && (
-            <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg z-50 py-1">
-              <button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center gap-2">
-                <span className="text-gray-400">📄</span>
-                Export to DOCX
-              </button>
-              <button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center gap-2">
-                <span className="text-gray-400">📝</span>
-                Export to TXT
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="relative">
-          <button 
-            className="p-1.5 hover:bg-slate-500 rounded"
-            onClick={() => setShowProfileMenu(!showProfileMenu)}
-          >
-            <span className="block w-5 h-5 rounded-full border-2 border-white"></span>
-          </button>
-
-          {showProfileMenu && (
-            <div className="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-lg z-50">
-              <div className="px-4 py-3 border-b border-gray-100">
-                <div className="font-medium text-gray-900">{user.name}</div>
-                <div className="text-sm text-gray-500">{user.email}</div>
-              </div>
-              <div className="py-1">
-                <button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center gap-2">
-                  <Settings className="w-4 h-4" />
-                  Account Settings
-                </button>
-                <button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4" />
-                  FAQ
-                </button>
-                <button className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left flex items-center gap-2">
-                  <LogOut className="w-4 h-4" />
-                  Log Out
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <button className="p-2 hover:bg-gray-100 rounded">
+          <MoreHorizontal className="w-6 h-6" />
+        </button>
       </div>
     </div>
   );
 };
+
+export default TopToolbar;
